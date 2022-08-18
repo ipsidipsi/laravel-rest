@@ -1,0 +1,16 @@
+[
+  {
+    "accountnumber": "0303030303",
+    "consumername": "ccc",
+    "netamount": 100,
+    "duedate": "2022-08-02",
+    "billmonth": "2022-08-02"
+  },
+  {
+    "accountnumber": "0404040404",
+    "consumername": "ddd",
+    "netamount": 380.03,
+    "duedate": "2022-08-03",
+    "billmonth": "2022-08-12"
+  }
+]

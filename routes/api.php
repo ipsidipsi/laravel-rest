@@ -16,10 +16,20 @@ use Illuminate\Support\Facades\storage_path;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//-------------ORIGINNAL API AUTH
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    //----------------------ALL CONSUMERS IN JSON FILE----------------------------
+    Route:: get('/unpaid', [BillingsApiController::class, 'index']);
+
+    //----------------------SPECIFIC CONSUMERS IN JSON FILE SANA-----------
+    Route:: get('/unpaid/{accountnumber}', [BillingsApiController::class, 'getaccountno']);
 });
+    //     return $request->user();
+    // });
 
 //-----------ALL CONSUMERS in DB--------------
 // Route:: get('/billing', function(){
@@ -32,25 +42,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return Billings::where('accountnumber',$accountnumber)->first();
   
 // });
-//----------------------ALL CONSUMERS IN JSON FILE----------------------------
-Route:: get('/unpaid', function(){
-
-    $filename='unpaidconsumers';
-    $path = storage_path() . "/json_files/${filename}.json"; // ie: /var/www/laravel/app/storage/json/filename.json
-    $json = json_decode(file_get_contents($path), true); 
-    return $json;
-});
-
-
-//----------------------SPECIFIC CONSUMERS IN JSON FILE SANA-----------
-Route:: get('/unpaid/{accountnumber}', function($accountnumber){
-    
-    $filename='unpaidconsumers';
-    $path = storage_path() . "/json_files/${filename}.json"; // ie: /var/www/laravel/app/storage/json/filename.json
-    $data=file_get_contents($path);
-    $json = json_decode($data, true); 
-      return collect($json)->where('accountnumber',$accountnumber)->first();
-    });
 
 //Route::get('/csv', [BillingsApiController::class, 'readCsv']);
 
