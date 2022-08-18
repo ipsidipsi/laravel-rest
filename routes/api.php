@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\Billings;
-use App\Http\Controllers\PostsApiController;
+use App\Http\Controllers\BillingsApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\storage_path;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,24 +21,38 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route:: get('/billing', function(){
-    return Billings::all();
+//-----------ALL CONSUMERS in DB--------------
+// Route:: get('/billing', function(){
+//     return Billings::all();
   
+//});
+//----------SPECIFIC CONSUMERS in DB--------------------
+// Route:: get('/billing/{accountnumber}', function($accountnumber){
+
+//     return Billings::where('accountnumber',$accountnumber)->first();
+  
+// });
+//----------------------ALL CONSUMERS IN JSON FILE----------------------------
+Route:: get('/unpaid', function(){
+
+    $filename='unpaidconsumers';
+    $path = storage_path() . "/json_files/${filename}.json"; // ie: /var/www/laravel/app/storage/json/filename.json
+    $json = json_decode(file_get_contents($path), true); 
+    return $json;
 });
 
-Route:: get('/billing/{accountnumber}', function($accountnumber){
 
-    return Billings::where('accountnumber',$accountnumber)->first();
-  
-});
+//----------------------SPECIFIC CONSUMERS IN JSON FILE SANA-----------
+Route:: get('/unpaid/{accountnumber}', function($accountnumber){
+    
+    $filename='unpaidconsumers';
+    $path = storage_path() . "/json_files/${filename}.json"; // ie: /var/www/laravel/app/storage/json/filename.json
+    $data=file_get_contents($path);
+    $json = json_decode($data, true); 
+      return collect($json)->where('accountnumber',$accountnumber)->first();
+    });
 
-Route:: get('/json', function(){
-   $b= new Billings();
-   return dd($b);
-  
-});
-
-//Route::get('/billing', [BillingsApiController::class, 'index']);
+//Route::get('/csv', [BillingsApiController::class, 'readCsv']);
 
 //Route::get('/billing/{billing}', [PostsApiController::class, 'index']);
 // Route::post('/posts', [PostsApiController::class, 'store']);
